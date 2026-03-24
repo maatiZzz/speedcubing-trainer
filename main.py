@@ -9,10 +9,17 @@ def generate_sequence(moves):
     double_move_chance = 0.3
 
     for _ in range(length):
+        random_index = random.randint(0, len(moves) - 1)
+
+        # don't repeat last move
+        if sequence and moves[random_index] in sequence[-1]:
+             length += 1
+             continue
+        
         if random.random() < double_move_chance:
-            sequence.append("2" + moves[random.randint(0, len(moves) - 1)])
+                sequence.append("2" + moves[random_index])
         else:
-            sequence.append(moves[random.randint(0, len(moves) - 1)])
+            sequence.append(moves[random_index])
         
     return sequence
 
