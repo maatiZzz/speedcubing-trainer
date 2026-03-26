@@ -29,7 +29,8 @@ class Cube:
 
     def get_sequence_str(self):
         sq = ""
+        
         for move in self.sequence:
            sq += move + "   "
-        print(sq)
+
         return sq
