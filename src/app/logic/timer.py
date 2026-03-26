@@ -3,7 +3,7 @@ import customtkinter as ctk
 
 class Timer(ctk.CTkLabel):
     def __init__(self, timer_frame):
-        super().__init__(timer_frame, text = "0.000", font=('Arial', 24))
+        super().__init__(timer_frame, text = "0.000", font=('Arial', 26))
         self.grid(row = 0, column = 0, padx = 20, pady = 40, sticky = "new", columnspan = 2)
 
         self.start_timestamp = 0
