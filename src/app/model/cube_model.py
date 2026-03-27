@@ -18,6 +18,5 @@ class ModelApp:
                 for z in range(-1, 2):
                     self.pieces[x + 1][y + 1][z + 1] = Piece(x, y, z)
 
-
     def run_model_app(self):
         self.app.run()
