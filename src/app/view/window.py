@@ -2,6 +2,7 @@ import os
 import customtkinter as ctk
 from app.logic.cube import Cube
 from app.logic.timer import Timer
+from app.model.cube_model import ModelApp
 
 class App(ctk.CTk):
     def __init__(self):
@@ -10,30 +11,36 @@ class App(ctk.CTk):
         self.title("Cube scrambler")
 
         # need to load absolute path
-        curr_dir = os.path.dirname(os.path.abspath(__file__))
-        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(curr_dir)))
-        icon_path = os.path.join(root_dir, "assets", "icon", "icon.ico")
+        self.icon_path = self.set_icon_path()
 
         self.bind('<space>', lambda event : self.__start_stop_clicked())
         self.bind('<r>', lambda event : self.__reset_clicked())
         self.bind('<g>', lambda event : self.__generate())
 
         try:
-            self.iconbitmap(icon_path)
+            self.iconbitmap(self.icon_path)
         except Exception as e:
             print(f"Couldn't load icon {e}")
 
         self.cube = Cube()
 
         self.grid_columnconfigure((0), weight = 1)
-        self.grid_rowconfigure((0, 1), weight = 1)
+        self.grid_rowconfigure((0, 1, 2), weight = 1)
 
         # SCRAMBLE FRAME
         self.__init_scramble_frame()
 
+        # 3D model button
+        self.model_button = ctk.CTkButton(self, text="View 3D cube model", command=self.__load_3d_model,
+                                               bg_color="black", font=('Arial', 18))
+        self.model_button.grid(row = 1, column = 0, padx = 20, pady = 20, columnspan = 2)
+
         # TIMER FRAME
         self.__init_timer_frame()
 
+    def __load_3d_model(self):
+        self.model = ModelApp()
+        self.model.run_model_app()
 
     def __generate(self):
         self.cube.generate_sequence()
@@ -69,13 +76,22 @@ class App(ctk.CTk):
         self.resume_button.grid_forget()
         self.start_stop_button.grid(row = 1, column = 0, padx = 20, pady = 40, sticky = "sew")
 
+    def get_icon_path(self):
+        return self.icon_path
+    
+    def set_icon_path(self):
+        curr_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(curr_dir)))
+        icon_path = os.path.join(root_dir, "assets", "icon", "icon.ico")
+        self.icon_path = icon_path
+
     def __show_resume_button(self):
         self.start_stop_button.grid_forget()
         self.resume_button.grid(row = 1, column = 0, padx = 20, pady = 40, sticky = "sew")
 
     def __init_timer_frame(self):
         self.timer_frame = ctk.CTkFrame(self)
-        self.timer_frame.grid(row=1, column=0, padx=20, pady=20, sticky="sew")
+        self.timer_frame.grid(row=2, column=0, padx=1, pady=10, sticky="sew")
         self.timer_frame.grid_columnconfigure((0, 1), weight=1)
         
         self.timer = Timer(self.timer_frame)
@@ -90,7 +106,7 @@ class App(ctk.CTk):
 
     def __init_scramble_frame(self):
         self.sequence_frame = ctk.CTkFrame(self)
-        self.sequence_frame.grid(row=0, column=0, padx=20, pady=20, sticky="new")
+        self.sequence_frame.grid(row=0, column=0, padx=10, pady=10, sticky="new")
         self.sequence_frame.grid_columnconfigure((0), weight=1)
 
         self.sequence_string = ctk.CTkLabel(self.sequence_frame, text="Generate your scramble", font=('Arial', 22))
