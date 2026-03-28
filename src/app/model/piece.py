@@ -1,26 +1,64 @@
 import ursina as ur
 from ursina import Texture
 from PIL import Image
+from app.model.face import Face
 import os
 
 class Piece(ur.Entity):
-    def __init__(self, position_x, position_y, position_z):
+    def __init__(self, pos_x, pos_y, pos_z):
         super().__init__()
-        self.model='cube'
-        self.scale = (.8, .8, .8)
+        self.scale = (.95, .95, .95)
         self.origin = (0,0,0)
-        self.position = ur.Vec3(position_x,position_y,position_z)
+        self.position = ur.Vec3(pos_x,pos_y,pos_z)
  
-        self.img_path = self.__set_img_path()
-        try:
-            self.img = Image.open(self.img_path).convert('RGB')
-            print(self.img.getpixel((0,0)))
-            self.texture = Texture(self.img)
-            self.texture.filtering = None           # sharp colors
-        except Exception as e:
-            raise(f"Couldn't load texture {e}")
+        img_path = self.__set_img_path()
+        self.__init_img(img_path)
+        self.texture = Texture(self.img)
+        self.texture.filtering = None           # sharp colors
+        
+        self.faces = []
+        self.__init_faces()
+
 
     def __set_img_path(self):
         curr_dir = os.path.dirname(os.path.abspath(__file__))   # model dir path
         root_dir = os.path.dirname(os.path.dirname(os.path.dirname(curr_dir)))
         return os.path.join(root_dir, "assets", "cube-colors", "cube-colors.png")
+
+    def __init_img(self, img_path):
+        try:
+            self.img = Image.open(img_path).convert('RGB')
+
+        except Exception as e:
+            raise(f"Couldn't load texture {e}")
+        
+    def __init_faces(self):
+        for _ in range(6):
+            if self.position.X_getter() == -1:                              # left face orange
+                self.faces.append(Face(self, self.img, 'l', face_color='o'))
+            else:
+                self.faces.append(Face(self, self.img, 'l'))
+            if self.position.X_getter() == 1:                              # right face red
+                self.faces.append(Face(self, self.img, 'r', face_color='r'))
+            else:
+                self.faces.append(Face(self, self.img, 'r'))
+            if self.position.Y_getter() == -1:                              # down face white
+                self.faces.append(Face(self, self.img, 'd', face_color='w'))
+            else:
+                self.faces.append(Face(self, self.img, 'd'))
+            if self.position.Y_getter() == 1:                              # up face yellow
+                self.faces.append(Face(self, self.img, 'u', face_color='y'))
+            else:
+                self.faces.append(Face(self, self.img, 'u'))
+            if self.position.Z_getter() == -1:                              # back face green
+                self.faces.append(Face(self, self.img, 'b', face_color='g'))
+            else:
+                self.faces.append(Face(self, self.img, 'b'))
+            if self.position.Z_getter() == 1:                              # front face blue
+                self.faces.append(Face(self, self.img, 'f', face_color='b'))
+            else:
+                self.faces.append(Face(self, self.img, 'f'))
+        
+
+    def get_position(self):
+        return self.position
