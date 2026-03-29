@@ -24,12 +24,12 @@ class Piece(ur.Entity):
                 continue    # skip middle cube
 
             if self.position.X_getter() == -1:                              # left face orange
-                self.faces.append(Face(self, self.img, 'l', face_color='o'))
+                self.faces.append(Face(self, self.img, 'l', face_color='r'))
             else:
                 self.faces.append(Face(self, self.img, 'l'))
 
             if self.position.X_getter() == 1:                              # right face red
-                self.faces.append(Face(self, self.img, 'r', face_color='r'))
+                self.faces.append(Face(self, self.img, 'r', face_color='o'))
             else:
                 self.faces.append(Face(self, self.img, 'r'))
 
@@ -52,7 +52,12 @@ class Piece(ur.Entity):
                 self.faces.append(Face(self, self.img, 'f', face_color='b'))
             else:
                 self.faces.append(Face(self, self.img, 'f'))
-        
 
     def get_position(self):
         return self.position
+
+    def set_parent(self, parent):
+        self.parent = parent
+    
+    def set_world_parent(self, parent):
+        self.world_parent = parent

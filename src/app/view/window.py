@@ -2,7 +2,7 @@ import os
 import customtkinter as ctk
 from app.logic.cube import Cube
 from app.logic.timer import Timer
-from app.model.cube_model import ModelApp
+from app.model.model_app import ModelApp
 
 class App(ctk.CTk):
     def __init__(self):

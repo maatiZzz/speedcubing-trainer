@@ -1,6 +1,5 @@
 from app.view.window import App
-from app.model.piece import Piece 
-from app.model.cube_model import ModelApp 
+from app.model.model_app import ModelApp 
 
 def main():
     model = ModelApp()
