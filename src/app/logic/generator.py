@@ -1,6 +1,6 @@
 import random
 
-class Cube:
+class Generator:
     def __init__(self):
         self.moves = ['U', 'D', 'R', 'L', 'F', 'B', 'U\'', 'D\'', 'R\'', 'L\'', 'F\'', 'B\'']
         self.double_move_chance = 0.5

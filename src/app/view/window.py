@@ -1,6 +1,6 @@
 import os
 import customtkinter as ctk
-from app.logic.cube import Cube
+from app.logic.generator import Generator
 from app.logic.timer import Timer
 from app.model.model_app import ModelApp
 
@@ -12,17 +12,16 @@ class App(ctk.CTk):
 
         # need to load absolute path
         self.icon_path = self.set_icon_path()
-
-        self.bind('<space>', lambda event : self.__start_stop_clicked())
-        self.bind('<r>', lambda event : self.__reset_clicked())
-        self.bind('<g>', lambda event : self.__generate())
-
         try:
             self.iconbitmap(self.icon_path)
         except Exception as e:
             print(f"Couldn't load icon {e}")
 
-        self.cube = Cube()
+        self.bind('<space>', lambda event : self.__start_stop_clicked())
+        self.bind('<r>', lambda event : self.__reset_clicked())
+        self.bind('<g>', lambda event : self.__generate())
+
+        self.generator = Generator()
 
         self.grid_columnconfigure((0), weight = 1)
         self.grid_rowconfigure((0, 1, 2), weight = 1)
@@ -39,13 +38,13 @@ class App(ctk.CTk):
         self.__init_timer_frame()
 
     def __load_3d_model(self):
-        self.model = ModelApp()
+        self.model = ModelApp(self.sq)
         self.model.run_model_app()
 
     def __generate(self):
-        self.cube.generate_sequence()
-        sq = self.cube.get_sequence_str()
-        self.sequence_string.configure(text=sq)
+        self.generator.generate_sequence()
+        self.sq = self.generator.get_sequence_str()
+        self.sequence_string.configure(text=self.sq)
 
     def __start_stop_clicked(self):
 

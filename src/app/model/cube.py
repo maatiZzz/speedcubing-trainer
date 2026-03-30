@@ -1,15 +1,17 @@
-from ursina import Entity, invoke, curve
+from ursina import Entity, invoke, curve, Func, Sequence, Wait
 from app.model.piece import Piece 
 import numpy as np
 
 class Cube(Entity):
-    def __init__(self, img):
+    def __init__(self, img, sq):
         super().__init__()
 
         self.origin = (0,0,0)
         self.img = img
 
         self.__init_pieces()
+
+        self.sequence = sq
 
         self.is_rotating = False
 
@@ -32,38 +34,18 @@ class Cube(Entity):
             return
 
         if key == 'l':
-            for p in self.pieces:
-                if p.get_position()[0] == -1:
-                    p.set_parent(self.l_face)
-            self.face_move(self.l_face, 'x', -1)
+            self.face_move('x', -1, -1)
         if key == 'r':
-            for p in self.pieces:
-                if p.get_position()[0] == 1:   
-                    p.set_parent(self.r_face)
-            self.face_move(self.r_face, 'x', 1)
+            self.face_move('x', 1, 1)
         if key == 'u':
-            for p in self.pieces:
-                if p.get_position()[1] == 1:   
-                    p.set_parent(self.u_face)
-            self.face_move(self.u_face, 'y', 1)
+            self.face_move('y', 1, 1)
         if key == 'd':
-            for p in self.pieces:
-                if p.get_position()[1] == -1:   
-                    p.set_parent(self.d_face)
-            self.face_move(self.d_face, 'y', -1)
+            self.face_move('y', -1, -1)
         if key == 'f':
-            for p in self.pieces:
-                if p.get_position()[2] == -1:   
-                    p.set_parent(self.f_face)
-            self.face_move(self.f_face, 'z', 1)
+            self.face_move('z', -1, 1)
         if key == 'b':
-            for p in self.pieces:
-                if p.get_position()[2] == 1:   
-                    p.set_parent(self.b_face)
-            self.face_move(self.b_face, 'z', -1)
+            self.face_move('z', 1, -1)
          
-
-
     def reset_parenting(self):
         for p in self.pieces:
             p.set_world_parent(self)
@@ -83,15 +65,86 @@ class Cube(Entity):
 
         self.is_rotating = False
 
-    def face_move(self, face, dimension, direction):
+    def face_move(self, dimension, coord, direction):
         self.is_rotating = True
 
+        face = self.__face_prepare(dimension, coord)
+
         if dimension == 'x':
-            face.animate_rotation_x(face.rotation_x + (direction * 90), duration=0.3)
+            face.animate_rotation_x(face.rotation_x + (direction * 90), duration=0.3, curve=curve.in_out_sine)
         elif dimension == 'y':
-            face.animate_rotation_y(face.rotation_y + (direction * 90), duration=0.3)
+            face.animate_rotation_y(face.rotation_y + (direction * 90), duration=0.3, curve=curve.in_out_sine)
         elif dimension == 'z':
-            face.animate_rotation_z(face.rotation_z + (direction * 90), duration=0.3)
+            face.animate_rotation_z(face.rotation_z + (direction * 90), duration=0.3, curve=curve.in_out_sine)
 
         invoke(self.reset_parenting, delay=0.4)
-      
+    
+    def animate_sequence(self):
+        # self.sequence = 'U D L R F B U\' D\' L\' R\' F\' B\''
+        moves_arr = self.sequence.split()
+        print(moves_arr)
+        s = Sequence()
+        for m in moves_arr:
+            if m == 'L':
+                s.append(Func(self.face_move, 'x', -1, -1))
+            if m == 'L\'':
+                s.append(Func(self.face_move, 'x', -1, 1))
+            if m == 'R':
+                s.append(Func(self.face_move, 'x', 1, 1))
+            if m == 'R\'':
+                s.append(Func(self.face_move, 'x', 1, -1))
+            if m == 'U':
+                s.append(Func(self.face_move, 'y', 1, 1))
+            if m == 'U\'':
+                s.append(Func(self.face_move, 'y', 1, -1))
+            if m == 'D':
+                s.append(Func(self.face_move, 'y', -1, -1))
+            if m == 'D\'':
+                s.append(Func(self.face_move, 'y', -1, 1))
+            if m == 'F':
+                s.append(Func(self.face_move, 'z', -1, 1))
+            if m == 'F\'':
+                s.append(Func(self.face_move, 'z', -1, -1))
+            if m == 'B':
+                s.append(Func(self.face_move, 'z', 1, -1))
+            if m == 'B\'':
+                s.append(Func(self.face_move, 'z', 1, 1))
+
+            s.append(Wait(0.5))
+
+        s.start()
+
+    def __get_dimension(self, dimension):
+        if dimension == 'x':
+            return 0
+        elif dimension == 'y':
+            return 1
+        else:
+            return 2
+        
+    def __get_face(self, dimension, coord):
+        if dimension == 'x':
+            if coord == 1:
+                return self.r_face
+            else:
+                return self.l_face
+        if dimension == 'y':
+            if coord == 1:
+                return self.u_face
+            else:
+                return self.d_face
+        if dimension == 'z':
+            if coord == 1:
+                return self.b_face
+            else:
+                return self.f_face
+        
+    def __face_prepare(self, dimension, coord):
+        int_dim = self.__get_dimension(dimension)
+        face = self.__get_face(dimension, coord)        
+
+        for p in self.pieces:
+            if p.get_position()[int_dim] == coord:   
+                p.set_parent(face)
+
+        return face

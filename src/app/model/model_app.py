@@ -7,7 +7,7 @@ import os
 from PIL import Image
 
 class ModelApp:
-    def __init__(self):
+    def __init__(self, sequence):
         self.app = ur.Ursina(title = 'Cube model')
 
         self.camera = EditorCamera()
@@ -17,7 +17,13 @@ class ModelApp:
         img_path = self.__set_img_path()
         self.__init_img(img_path) 
         
-        self.cube = Cube(self.img)
+        self.sequence = sequence
+        self.__init_sq_text()
+
+        self.cube = Cube(self.img, self.sequence)
+
+        self.animate_button = ur.Button('Scramble', position=(0.0,0.4), radius=.01, scale=(0.2, 0.07),
+                                         on_click=self.cube.animate_sequence)
 
     def run_model_app(self):
         self.app.run()
@@ -33,3 +39,6 @@ class ModelApp:
 
         except Exception as e:
             raise(f"Couldn't load texture {e}")
+        
+    def __init_sq_text(self):
+        self.sq_text = ur.Text(text=self.sequence, position=(-.5, .5), scale=1.3, color=ur.color.red)
