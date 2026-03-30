@@ -1,9 +1,8 @@
 from ursina import Entity, invoke, curve, Func, Sequence, Wait
 from app.model.piece import Piece 
-import numpy as np
 
 class Cube(Entity):
-    def __init__(self, img, sq):
+    def __init__(self, img, sq=''):
         super().__init__()
 
         self.origin = (0,0,0)
@@ -14,6 +13,7 @@ class Cube(Entity):
         self.sequence = sq
 
         self.is_rotating = False
+        self.animation_speed = 0.5
 
     def __init_pieces(self):
         self.pieces = []
@@ -28,6 +28,9 @@ class Cube(Entity):
             for y in range(-1, 2):
                 for z in range(-1, 2):
                     self.pieces.append(Piece(x, y, z, self.img))
+
+    def change_speed(self, slider):
+        self.animation_speed = slider.value
 
     def input(self, key):
         if self.is_rotating:
@@ -69,50 +72,87 @@ class Cube(Entity):
         self.is_rotating = True
 
         face = self.__face_prepare(dimension, coord)
-
         if dimension == 'x':
-            face.animate_rotation_x(face.rotation_x + (direction * 90), duration=0.3, curve=curve.in_out_sine)
+            face.animate_rotation_x(face.rotation_x + (direction * 90), duration= 1-self.animation_speed, curve=curve.in_out_sine)
         elif dimension == 'y':
-            face.animate_rotation_y(face.rotation_y + (direction * 90), duration=0.3, curve=curve.in_out_sine)
+            face.animate_rotation_y(face.rotation_y + (direction * 90), duration= 1-self.animation_speed, curve=curve.in_out_sine)
         elif dimension == 'z':
-            face.animate_rotation_z(face.rotation_z + (direction * 90), duration=0.3, curve=curve.in_out_sine)
+            face.animate_rotation_z(face.rotation_z + (direction * 90), duration=1-self.animation_speed, curve=curve.in_out_sine)
 
-        invoke(self.reset_parenting, delay=0.4)
+        invoke(self.reset_parenting, delay=1-self.animation_speed+0.1)
     
-    def animate_sequence(self):
+    def animate_sequence(self, sequence, slider, stop_button, animate_button):
         # self.sequence = 'U D L R F B U\' D\' L\' R\' F\' B\''
         moves_arr = self.sequence.split()
-        print(moves_arr)
-        s = Sequence()
         for m in moves_arr:
             if m == 'L':
-                s.append(Func(self.face_move, 'x', -1, -1))
-            if m == 'L\'':
-                s.append(Func(self.face_move, 'x', -1, 1))
+                sequence.append(Func(self.face_move, 'x', -1, -1))
             if m == 'R':
-                s.append(Func(self.face_move, 'x', 1, 1))
-            if m == 'R\'':
-                s.append(Func(self.face_move, 'x', 1, -1))
+                sequence.append(Func(self.face_move, 'x', 1, 1))
             if m == 'U':
-                s.append(Func(self.face_move, 'y', 1, 1))
-            if m == 'U\'':
-                s.append(Func(self.face_move, 'y', 1, -1))
+                sequence.append(Func(self.face_move, 'y', 1, 1))
             if m == 'D':
-                s.append(Func(self.face_move, 'y', -1, -1))
-            if m == 'D\'':
-                s.append(Func(self.face_move, 'y', -1, 1))
+                sequence.append(Func(self.face_move, 'y', -1, -1))
             if m == 'F':
-                s.append(Func(self.face_move, 'z', -1, 1))
-            if m == 'F\'':
-                s.append(Func(self.face_move, 'z', -1, -1))
+                sequence.append(Func(self.face_move, 'z', -1, 1))
             if m == 'B':
-                s.append(Func(self.face_move, 'z', 1, -1))
+                sequence.append(Func(self.face_move, 'z', 1, -1))
+
+            if m == '2L':
+                sequence.append(Func(self.face_move, 'x', -1, -1))
+                sequence.append(Wait(1-self.animation_speed + 0.2))
+                sequence.append(Func(self.face_move, 'x', -1, -1))
+            if m == '2R':
+                sequence.append(Func(self.face_move, 'x', 1, 1))
+                sequence.append(Wait(1-self.animation_speed + 0.2))
+                sequence.append(Func(self.face_move, 'x', 1, 1))
+            if m == '2U':
+                sequence.append(Func(self.face_move, 'y', 1, 1))
+                sequence.append(Wait(1-self.animation_speed + 0.2))
+                sequence.append(Func(self.face_move, 'y', 1, 1))
+            if m == '2D':
+                sequence.append(Func(self.face_move, 'y', -1, -1))
+                sequence.append(Wait(1-self.animation_speed + 0.2))
+                sequence.append(Func(self.face_move, 'y', -1, -1))
+            if m == '2F':
+                sequence.append(Func(self.face_move, 'z', -1, 1))
+                sequence.append(Wait(1-self.animation_speed + 0.2))
+                sequence.append(Func(self.face_move, 'z', -1, 1))
+            if m == '2B':
+                sequence.append(Func(self.face_move, 'z', 1, -1))
+                sequence.append(Wait(1-self.animation_speed + 0.2))
+                sequence.append(Func(self.face_move, 'z', 1, -1))
+
+            if m == 'R':
+                sequence.append(Func(self.face_move, 'x', 1, 1))
+            if m == 'L\'':
+                sequence.append(Func(self.face_move, 'x', -1, 1))
+            if m == 'R\'':
+                sequence.append(Func(self.face_move, 'x', 1, -1))
+            if m == 'U\'':
+                sequence.append(Func(self.face_move, 'y', 1, -1))
+            if m == 'D\'':
+                sequence.append(Func(self.face_move, 'y', -1, 1))
+            if m == 'F\'':
+                sequence.append(Func(self.face_move, 'z', -1, -1))
             if m == 'B\'':
-                s.append(Func(self.face_move, 'z', 1, 1))
+                sequence.append(Func(self.face_move, 'z', 1, 1))
 
-            s.append(Wait(0.5))
+            sequence.append(Wait(1-self.animation_speed + 0.2))
 
-        s.start()
+        slider.enabled = False
+        stop_button.enabled = True
+        animate_button.enabled = False
+        sequence.start()
+
+    def stop_animation(self, sequence):
+        sequence.pause()
+
+    def resume_animation(self, sequence, resume_button, stop_button):
+        sequence.resume()
+        resume_button.enabled = False
+        resume_button.enabled = False
+        stop_button.enabled = True
 
     def __get_dimension(self, dimension):
         if dimension == 'x':

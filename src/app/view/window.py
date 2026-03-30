@@ -2,7 +2,7 @@ import os
 import customtkinter as ctk
 from app.logic.generator import Generator
 from app.logic.timer import Timer
-from app.model.model_app import ModelApp
+from app.model.root_app import RootApp
 
 class App(ctk.CTk):
     def __init__(self):
@@ -21,6 +21,8 @@ class App(ctk.CTk):
         self.bind('<r>', lambda event : self.__reset_clicked())
         self.bind('<g>', lambda event : self.__generate())
 
+        self.moves = ''
+
         self.generator = Generator()
 
         self.grid_columnconfigure((0), weight = 1)
@@ -38,13 +40,13 @@ class App(ctk.CTk):
         self.__init_timer_frame()
 
     def __load_3d_model(self):
-        self.model = ModelApp(self.sq)
-        self.model.run_model_app()
+        self.model_app = RootApp(self.moves)
+        self.model_app.run_root_app()
 
     def __generate(self):
         self.generator.generate_sequence()
-        self.sq = self.generator.get_sequence_str()
-        self.sequence_string.configure(text=self.sq)
+        self.moves = self.generator.get_sequence_str()
+        self.sequence_string.configure(text=self.moves)
 
     def __start_stop_clicked(self):
 

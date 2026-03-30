@@ -4,7 +4,7 @@ class Generator:
     def __init__(self):
         self.moves = ['U', 'D', 'R', 'L', 'F', 'B', 'U\'', 'D\'', 'R\'', 'L\'', 'F\'', 'B\'']
         self.double_move_chance = 0.5
-        self.sequence = None
+        self.sequence = ''
 
     def generate_sequence(self):
         length = random.randint(20, 22)
