@@ -19,8 +19,8 @@ class MainScene(Entity):
 
         self.moves_queue = Sequence()
         
-        self.speed_slider = Slider(0.1, 0.9, default = 0.5, position=(0.0, -0.3), step=0.01, origin = (0,0),
-                                    text='Animation speed', bar_color=color.hex('#F5F5F5'), dynamic=True)
+        self.speed_slider = Slider(0.1, 0.9, default = 0.5, position=(0, -0.3), step=0.01,
+                                    text='Speed', bar_color=color.hex('#F5F5F5'), dynamic=True)
         self.speed_slider.on_value_changed = Func(self.cube.change_speed, self.speed_slider)
         
         self.stop_button = Button('Stop', position=(0,-0.4), radius=.01, scale=(0.1, 0.05), enabled = False,
