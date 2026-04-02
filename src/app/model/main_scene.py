@@ -1,11 +1,11 @@
-from ursina import Button, Slider, Text, Ursina, color, Func, Sequence, Entity
+from ursina import Button, Slider, Text, color, Func, Sequence, Entity
 from app.model.cube import Cube 
 from ursina.shaders import camera_grayscale_shader
 from ursina import EditorCamera
-
+import ursina
 
 class MainScene(Entity):
-    def __init__(self, img, sequence=''):
+    def __init__(self, img, queue, sequence=''):
         super().__init__()
 
         self.camera = EditorCamera()
@@ -15,7 +15,10 @@ class MainScene(Entity):
         self.sequence = sequence
         self.__init_sq_text()
 
-        self.cube = Cube(img, self.sequence)
+        self.process_queue = queue
+        self.img = img
+
+        self.cube = Cube(self.img, self.sequence)
 
         self.moves_queue = Sequence()
         
@@ -33,6 +36,15 @@ class MainScene(Entity):
         
     
     def update(self):
+        if not self.process_queue.empty():
+            self.sequence = self.process_queue.get()
+
+            self.cube.destroy_cube()
+            self.cube = Cube(self.img, self.sequence)
+
+            ursina.destroy(self.sq_text)
+            self.__init_sq_text()
+
         if self.moves_queue.finished:
             self.speed_slider.enabled = True
             self.animate_button.enabled = True

@@ -53,7 +53,7 @@ class App(ctk.CTk):
         self.model_app_process.start()
 
     def __start_ursina(self):
-        self.model_app = RootApp(self.moves)
+        self.model_app = RootApp(self.mp_queue, self.moves)
         self.model_app.run_root_app()
 
     def __generate(self):
@@ -62,35 +62,8 @@ class App(ctk.CTk):
         # update sequence frame
         self.sequence_string.configure(text=self.moves)
 
-
-    def __start_stop_clicked(self):
-
-        self.timer.change_timer_state()
-        self.timer.start_timer()
-
-        if (self.timer.get_timer_state()):
-            # running
-            self.start_stop_button.configure(text = "Stop (space)", fg_color = "red", hover_color="#7B0000")
-            self.__show_start_stop_button()
-        else:
-            # paused
-            self.__show_resume_button()
-            self.timer.set_paused(True)
-
-    def __resume_button_clicked(self):
-        if self.timer.get_paused():
-            # allow to resume if paused previosly
-            self.__show_start_stop_button()
-            self.timer.resume()
-        
-    def __reset_clicked(self):
-        self.timer.reset_timer()
-        self.start_stop_button.configure(text = "Start (space)", fg_color = "green", hover_color="#006810")
-        self.__show_start_stop_button()
-
-    def __show_start_stop_button(self):
-        self.resume_button.grid_forget()
-        self.start_stop_button.grid(row = 1, column = 0, padx = 20, pady = 40, sticky = "sew")
+        # put new generated sequence to queue
+        self.mp_queue.put(self.moves)
 
     def get_icon_path(self):
         return self.icon_path
@@ -151,3 +124,32 @@ class App(ctk.CTk):
 
     def __init_mp_queue(self):
         self.mp_queue = mp.Queue()
+    
+    def __start_stop_clicked(self):
+
+        self.timer.change_timer_state()
+        self.timer.start_timer()
+
+        if (self.timer.get_timer_state()):
+            # running
+            self.start_stop_button.configure(text = "Stop (space)", fg_color = "red", hover_color="#7B0000")
+            self.__show_start_stop_button()
+        else:
+            # paused
+            self.__show_resume_button()
+            self.timer.set_paused(True)
+
+    def __resume_button_clicked(self):
+        if self.timer.get_paused():
+            # allow to resume if paused previosly
+            self.__show_start_stop_button()
+            self.timer.resume()
+        
+    def __reset_clicked(self):
+        self.timer.reset_timer()
+        self.start_stop_button.configure(text = "Start (space)", fg_color = "green", hover_color="#006810")
+        self.__show_start_stop_button()
+
+    def __show_start_stop_button(self):
+        self.resume_button.grid_forget()
+        self.start_stop_button.grid(row = 1, column = 0, padx = 20, pady = 40, sticky = "sew")

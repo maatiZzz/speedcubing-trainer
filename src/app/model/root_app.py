@@ -5,13 +5,15 @@ import os
 
 
 class RootApp:
-    def __init__(self, generated_sq=''):
+    def __init__(self, queue, generated_sq=''):
         self.app = Ursina(title = 'Cube model')
         
         img_path = self.__set_img_path()
         self.__init_img(img_path) 
+
+        self.queue = queue
         
-        self.main_scene = MainScene(self.img, generated_sq)
+        self.main_scene = MainScene(self.img, self.queue, generated_sq)
 
     def run_root_app(self):
         self.app.run()

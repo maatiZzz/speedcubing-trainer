@@ -1,4 +1,5 @@
-from ursina import Entity, invoke, curve, Func, Sequence, Wait
+from ursina import Entity, invoke, curve, Func, Wait
+import ursina
 from app.model.piece import Piece 
 
 class Cube(Entity):
@@ -188,3 +189,8 @@ class Cube(Entity):
                 p.set_parent(face)
 
         return face
+    
+    def destroy_cube(self):
+        for p in self.pieces:
+            p.set_parent(self)
+        ursina.destroy(self)
