@@ -83,8 +83,11 @@ class Cube(Entity):
         invoke(self.reset_parenting, delay=1-self.animation_speed+0.1)
     
     def animate_sequence(self, sequence, slider, stop_button, animate_button):
-        self.sequence = 'F R\' F\' R'
+        # self.sequence = 'F R\' F\' R'
         moves_arr = self.sequence.split()
+
+        self.change_speed(slider)
+        
         for m in moves_arr:
             if m == 'L':
                 sequence.append(Func(self.face_move, 'x', -1, -1))
@@ -138,7 +141,7 @@ class Cube(Entity):
                 sequence.append(Func(self.face_move, 'z', -1, -1))
             if m == 'B\'':
                 sequence.append(Func(self.face_move, 'z', 1, 1))
-
+            print(self.animation_speed)
             sequence.append(Wait(1-self.animation_speed + 0.2))
 
         slider.enabled = False

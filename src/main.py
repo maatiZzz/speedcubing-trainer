@@ -1,5 +1,4 @@
-from app.view.window import App
-from app.model.root_app import RootApp
+from app.main_menu.window import App
 
 if __name__ == '__main__':
     app = App()
