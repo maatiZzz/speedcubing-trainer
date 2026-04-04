@@ -1,6 +1,5 @@
 import os
 import customtkinter as ctk
-from multiprocessing import Queue, Process
 import multiprocessing as mp
 from app.logic.generator import Generator
 from app.logic.timer import Timer
@@ -22,10 +21,7 @@ class App(ctk.CTk):
         except Exception as e:
             print(f"Couldn't load icon {e}")
 
-        self.bind('<space>', lambda event : self.__start_stop_clicked())
-        self.bind('<r>', lambda event : self.__reset_clicked())
-        self.bind('<g>', lambda event : self.__generate())
-        self.bind('<Escape>', lambda event : self.close_app())
+        self.__init_key_binds()
 
         self.moves = ''
 
@@ -64,6 +60,9 @@ class App(ctk.CTk):
 
         # put new generated sequence to queue
         self.mp_queue.put(self.moves)
+
+    def close_app(self):
+        self.destroy()
 
     def get_icon_path(self):
         return self.icon_path
@@ -112,9 +111,6 @@ class App(ctk.CTk):
                                         bg_color="black", fg_color="#ff4d01", hover_color="#a63400", font=('Arial', 18))
         self.start_stop_button.grid(row = 1, column = 0, padx = 20, pady = 40, sticky = "sew")
         self.reset_button.grid(row = 1, column = 1, padx = 20, pady = 40, sticky = "sew")
-    
-    def close_app(self):
-        self.destroy()
 
     def __init_window(self, title):
         string = ''
@@ -124,6 +120,12 @@ class App(ctk.CTk):
 
     def __init_mp_queue(self):
         self.mp_queue = mp.Queue()
+
+    def __init_key_binds(self):
+        self.bind('<space>', lambda event : self.__start_stop_clicked())
+        self.bind('<r>', lambda event : self.__reset_clicked())
+        self.bind('<g>', lambda event : self.__generate())
+        self.bind('<Escape>', lambda event : self.close_app())
     
     def __start_stop_clicked(self):
 

@@ -1,6 +1,6 @@
 import ursina as ur
 from ursina import Texture
-from app.model.face import Face
+from app.model.cube.face import Face
 
 class Piece(ur.Entity):
     def __init__(self, pos_x, pos_y, pos_z, img):

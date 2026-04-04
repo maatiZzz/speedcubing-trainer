@@ -1,9 +1,9 @@
 import random
+from app.constants.constants import DOUBLE_MOVE_CHANCE
 
 class Generator:
     def __init__(self):
         self.moves = ['U', 'D', 'R', 'L', 'F', 'B', 'U\'', 'D\'', 'R\'', 'L\'', 'F\'', 'B\'']
-        self.double_move_chance = 0.5
         self.sequence = ''
 
     def generate_sequence(self):
@@ -25,7 +25,7 @@ class Generator:
                 continue
 
             
-            if random.random() < self.double_move_chance and '\'' not in random_move:
+            if random.random() < DOUBLE_MOVE_CHANCE and '\'' not in random_move:
                 sequence.append("2" + random_move)
             else:
                 sequence.append(random_move)

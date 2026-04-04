@@ -1,6 +1,6 @@
 from ursina import Entity, invoke, curve, Func, Wait
 import ursina
-from app.model.piece import Piece 
+from app.model.cube.piece import Piece 
 
 class Cube(Entity):
     def __init__(self, img, sq=''):
@@ -83,7 +83,7 @@ class Cube(Entity):
         invoke(self.reset_parenting, delay=1-self.animation_speed+0.1)
     
     def animate_sequence(self, sequence, slider, stop_button, animate_button):
-        # self.sequence = 'U D L R F B U\' D\' L\' R\' F\' B\''
+        self.sequence = 'F R\' F\' R'
         moves_arr = self.sequence.split()
         for m in moves_arr:
             if m == 'L':

@@ -1,5 +1,5 @@
 from ursina import Button, Slider, Text, color, Func, Sequence, Entity
-from app.model.cube import Cube 
+from app.model.cube.cube import Cube 
 from ursina.shaders import camera_grayscale_shader
 from ursina import EditorCamera
 import ursina
