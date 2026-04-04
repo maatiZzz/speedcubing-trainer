@@ -16,10 +16,7 @@ class App(ctk.CTk):
 
         # need to load absolute path
         self.icon_path = self.set_icon_path()
-        try:
-            self.iconbitmap(self.icon_path)
-        except Exception as e:
-            print(f"Couldn't load icon {e}")
+        self.__set_icon()
 
         self.__init_key_binds()
 
@@ -41,9 +38,9 @@ class App(ctk.CTk):
 
     def __load_3d_model(self):
         # destroy current process if exists
-        if hasattr(self, "model_app_process"):
-            if self.model_app_process.is_alive():
+        if hasattr(self, "model_app_process") and self.model_app_process.is_alive():
                 self.model_app_process.kill()
+
         # create new process
         self.model_app_process = mp.Process(target=self.__start_ursina)
         self.model_app_process.start()
@@ -72,6 +69,12 @@ class App(ctk.CTk):
         root_dir = os.path.dirname(os.path.dirname(os.path.dirname(curr_dir)))
         icon_path = os.path.join(root_dir, "assets", "icon", "icon.ico")
         self.icon_path = icon_path
+
+    def __set_icon(self):
+        try:
+            self.iconbitmap(self.icon_path)
+        except Exception as e:
+            print(f"Couldn't load icon {e}")
 
     def __show_resume_button(self):
         self.start_stop_button.grid_forget()

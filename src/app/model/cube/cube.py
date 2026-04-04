@@ -83,65 +83,47 @@ class Cube(Entity):
         invoke(self.reset_parenting, delay=1-self.animation_speed+0.1)
     
     def animate_sequence(self, sequence, slider, stop_button, animate_button):
-        # self.sequence = 'F R\' F\' R'
+        # self.sequence = 'F F\' B B\' L L\' R R\' U U\' D D\' 2F 2B 2L 2R 2U 2D'
+        # self.sequence = '2F 2B'
         moves_arr = self.sequence.split()
+        print(moves_arr)
 
         self.change_speed(slider)
         
         for m in moves_arr:
-            if m == 'L':
-                sequence.append(Func(self.face_move, 'x', -1, -1))
-            if m == 'R':
-                sequence.append(Func(self.face_move, 'x', 1, 1))
-            if m == 'U':
-                sequence.append(Func(self.face_move, 'y', 1, 1))
-            if m == 'D':
-                sequence.append(Func(self.face_move, 'y', -1, -1))
-            if m == 'F':
-                sequence.append(Func(self.face_move, 'z', -1, 1))
-            if m == 'B':
-                sequence.append(Func(self.face_move, 'z', 1, -1))
+            direction = -1 if len(m) > 1 and m[1] == '\'' else 1
 
-            if m == '2L':
-                sequence.append(Func(self.face_move, 'x', -1, -1))
-                sequence.append(Wait(1-self.animation_speed + 0.2))
-                sequence.append(Func(self.face_move, 'x', -1, -1))
-            if m == '2R':
-                sequence.append(Func(self.face_move, 'x', 1, 1))
-                sequence.append(Wait(1-self.animation_speed + 0.2))
-                sequence.append(Func(self.face_move, 'x', 1, 1))
-            if m == '2U':
-                sequence.append(Func(self.face_move, 'y', 1, 1))
-                sequence.append(Wait(1-self.animation_speed + 0.2))
-                sequence.append(Func(self.face_move, 'y', 1, 1))
-            if m == '2D':
-                sequence.append(Func(self.face_move, 'y', -1, -1))
-                sequence.append(Wait(1-self.animation_speed + 0.2))
-                sequence.append(Func(self.face_move, 'y', -1, -1))
-            if m == '2F':
-                sequence.append(Func(self.face_move, 'z', -1, 1))
-                sequence.append(Wait(1-self.animation_speed + 0.2))
-                sequence.append(Func(self.face_move, 'z', -1, 1))
-            if m == '2B':
-                sequence.append(Func(self.face_move, 'z', 1, -1))
-                sequence.append(Wait(1-self.animation_speed + 0.2))
-                sequence.append(Func(self.face_move, 'z', 1, -1))
+            if 'L' in m:
+                sequence.append(Func(self.face_move, 'x', -1, -direction))
+                if m[0] == '2':
+                    sequence.append(Wait(1-self.animation_speed + 0.2))
+                    sequence.append(Func(self.face_move, 'x', -1, -direction))
+            if 'R' in m:
+                sequence.append(Func(self.face_move, 'x', 1, direction))
+                if m[0] == '2':
+                    sequence.append(Wait(1-self.animation_speed + 0.2))
+                    sequence.append(Func(self.face_move, 'x', 1, direction))
+            if 'U' in m:
+                sequence.append(Func(self.face_move, 'y', 1, direction))
+                if m[0] == '2':
+                    sequence.append(Wait(1-self.animation_speed + 0.2))
+                    sequence.append(Func(self.face_move, 'y', 1, direction))
+            if 'D' in m:
+                sequence.append(Func(self.face_move, 'y', -1, -direction))
+                if m[0] == '2':
+                    sequence.append(Wait(1-self.animation_speed + 0.2))
+                    sequence.append(Func(self.face_move, 'y', -1, -direction))
+            if 'F' in m:
+                sequence.append(Func(self.face_move, 'z', -1, direction))
+                if m[0] == '2':
+                    sequence.append(Wait(1-self.animation_speed + 0.2))
+                    sequence.append(Func(self.face_move, 'z', -1, direction))
+            if 'B' in m:
+                sequence.append(Func(self.face_move, 'z', 1, -direction))
+                if m[0] == '2':
+                    sequence.append(Wait(1-self.animation_speed + 0.2))
+                    sequence.append(Func(self.face_move, 'z', 1, -direction))
 
-            if m == 'R':
-                sequence.append(Func(self.face_move, 'x', 1, 1))
-            if m == 'L\'':
-                sequence.append(Func(self.face_move, 'x', -1, 1))
-            if m == 'R\'':
-                sequence.append(Func(self.face_move, 'x', 1, -1))
-            if m == 'U\'':
-                sequence.append(Func(self.face_move, 'y', 1, -1))
-            if m == 'D\'':
-                sequence.append(Func(self.face_move, 'y', -1, 1))
-            if m == 'F\'':
-                sequence.append(Func(self.face_move, 'z', -1, -1))
-            if m == 'B\'':
-                sequence.append(Func(self.face_move, 'z', 1, 1))
-            print(self.animation_speed)
             sequence.append(Wait(1-self.animation_speed + 0.2))
 
         slider.enabled = False

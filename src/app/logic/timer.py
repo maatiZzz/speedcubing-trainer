@@ -26,7 +26,6 @@ class Timer(ctk.CTkLabel):
         self.previous_timestamp = self.current_timestamp
 
         self.string = self.__convert()
-        # self.string = str(format(self.elapsed_in_ms, '.3f'))
         return f"{self.string} s"
     
     def __convert(self):
