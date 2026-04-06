@@ -55,9 +55,9 @@ class App(ctk.CTk):
         self.model_app.run_root_app()
 
     def __generate(self):
-        # self.generator.generate_sequence()
-        # self.moves = self.generator.get_sequence_str()
-        self.moves = self.db_manager.view_data('algorithms')
+        self.generator.generate_sequence()
+        self.moves = self.generator.get_sequence_str()
+        # self.moves = self.db_manager.view_data('algorithms')
         # update sequence frame
         self.sequence_string.configure(text=self.moves)
 
