@@ -19,13 +19,14 @@ class App(ctk.CTk):
         # need to load absolute path
         self.icon_path = self.set_icon_path()
         self.__set_icon()
-
+        # key binds
         self.__init_key_binds()
 
         self.moves = ''
 
         self.generator = Generator()
 
+        self.model_type = ''
         # DATABASE
         self.__init_db()
 
@@ -41,6 +42,14 @@ class App(ctk.CTk):
         # TIMER FRAME
         self.__init_timer_frame()
 
+    def __load_scramble_model(self):
+        self.type = 'scramble'
+        self.__load_3d_model()    
+    
+    def __load_learn_model(self):
+        self.type = 'learn'
+        self.__load_3d_model()
+
     def __load_3d_model(self):
         # destroy current process if exists
         if hasattr(self, "model_app_process") and self.model_app_process.is_alive():
@@ -55,9 +64,8 @@ class App(ctk.CTk):
         self.model_app.run_root_app()
 
     def __generate(self):
-        # self.generator.generate_sequence()
-        # self.moves = self.generator.get_sequence_str()
-        self.moves = self.db_manager.view_data('algorithms')
+        self.generator.generate_sequence()
+        self.moves = self.generator.get_sequence_str()
         # update sequence frame
         self.sequence_string.configure(text=self.moves)
 
@@ -100,11 +108,16 @@ class App(ctk.CTk):
     def __init_model_frame(self):
         self.model_frame = ctk.CTkFrame(self)
         self.model_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
-        self.model_frame.grid_columnconfigure(0, weight=1)
+        self.model_frame.grid_columnconfigure((0, 1), weight=1)
 
-        self.model_button = ctk.CTkButton(self.model_frame, text="View 3D cube model", command=self.__load_3d_model,
+        self.model_button = ctk.CTkButton(self.model_frame, text="View 3D scramble animation", command=self.__load_scramble_model,
                                                bg_color="black", font=('Arial', 18))
-        self.model_button.grid(row = 0, column = 0, padx = 20, pady = 40, columnspan = 2, sticky="ew")
+        self.model_button.grid(row = 0, column = 0, padx = 20, pady = 40, sticky="ew")
+        
+        self.learn_button = ctk.CTkButton(self.model_frame, text="Learn algorithms", 
+                                          command=self.__load_learn_model,
+                                               bg_color="black", font=('Arial', 18))
+        self.learn_button.grid(row = 0, column = 1, padx = 20, pady = 40, sticky="ew")
 
     def __init_timer_frame(self):
         self.timer_frame = ctk.CTkFrame(self)

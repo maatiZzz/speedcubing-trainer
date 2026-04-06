@@ -1,5 +1,5 @@
 from ursina import Ursina
-from app.model.main_scene import MainScene
+from app.model.scenes.main_scene import MainScene
 from PIL import Image
 import os
 
