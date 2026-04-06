@@ -66,6 +66,7 @@ class App(ctk.CTk):
     def __generate(self):
         self.generator.generate_sequence()
         self.moves = self.generator.get_sequence_str()
+
         # update sequence frame
         self.sequence_string.configure(text=self.moves)
 
