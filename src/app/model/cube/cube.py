@@ -134,10 +134,10 @@ class Cube(Entity):
     def stop_animation(self, sequence):
         sequence.pause()
 
-    def resume_animation(self, sequence, resume_button, stop_button):
+    def resume_animation(self, sequence, resume_button, stop_button, reset_button):
         sequence.resume()
         resume_button.enabled = False
-        resume_button.enabled = False
+        reset_button.enabled = False
         stop_button.enabled = True
 
     def __get_dimension(self, dimension):

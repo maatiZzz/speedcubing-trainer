@@ -52,7 +52,7 @@ class MainScene(Entity):
         self.moves_queue = Sequence()
         
         self.cube.animate_sequence(self.moves_queue, self.speed_slider, self.stop_button, self.animate_button)
-        self.resume_button.on_click = Func(self.cube.resume_animation, self.moves_queue, self.resume_button, self.stop_button)
+        self.resume_button.on_click = Func(self.cube.resume_animation, self.moves_queue, self.resume_button, self.stop_button, self.reset_button)
         self.stop_button.on_click=Func(self.cube.stop_animation, self.moves_queue)
 
     def reset_animation(self):
