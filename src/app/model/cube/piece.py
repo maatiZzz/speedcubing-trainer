@@ -61,3 +61,8 @@ class Piece(ur.Entity):
     
     def set_world_parent(self, parent):
         self.world_parent = parent
+
+    def destroy_piece(self):
+        for f in self.faces:
+            ur.destroy(f)
+        ur.destroy(self)

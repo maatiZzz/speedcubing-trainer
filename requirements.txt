@@ -1,2 +1,4 @@
 ursina
 customtkinter
+bs4
+requests

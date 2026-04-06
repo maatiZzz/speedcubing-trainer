@@ -177,5 +177,5 @@ class Cube(Entity):
     
     def destroy_cube(self):
         for p in self.pieces:
-            p.set_parent(self)
+            p.destroy_piece()
         ursina.destroy(self)
