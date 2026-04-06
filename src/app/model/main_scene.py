@@ -31,9 +31,6 @@ class MainScene(Entity):
         self.__init_reset_button()
     
     def update(self):
-        if self.animation_on:                           # avoid crashing when generating new sequence
-            return
-        
         if not self.process_queue.empty():              # new generated sequence in processes queue
             self.sequence = self.process_queue.get()
 
@@ -51,8 +48,6 @@ class MainScene(Entity):
             self.__set_paused_animation_buttons()
 
     def run_animation(self):
-        self.animation_on = True
-
         self.moves_queue.kill()
         self.moves_queue = Sequence()
         
