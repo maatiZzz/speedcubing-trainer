@@ -1,16 +1,16 @@
 # Rubiks Cube Scrambler
 
-Appliaction made for personal purposes.
-
-Can be used as a tool to :
-- train speedcubing
+Can be used as a tool to train speedcubing by:
+- generating scrambles
 - tracking progress
-- learning new patterns (supported with 3D cube animamations).
+- learning new patterns (supported with 3D cube animamations)
 
 # Requirements
 
 - Ursina
 - CustomTkinter
+- BeautifulSoup
+- Requests
 
 # Usage
 
