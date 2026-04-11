@@ -1,11 +1,10 @@
 import os
 import customtkinter as ctk
 import multiprocessing as mp
+from app.main_menu.learn_window import LearnWindow
 from app.logic.generator import Generator
 from app.logic.timer import Timer
 from app.model.root_app import RootApp
-from app.logic.database.db_manager import DBManager
-from app.logic.scraper.algo_scraper import AlgorithmScraper
 from app.constants.constants import ROOT_WINDOW_HEIGHT, ROOT_WINDOW_WIDTH
 
 class App(ctk.CTk):
@@ -27,8 +26,6 @@ class App(ctk.CTk):
         self.generator = Generator()
 
         self.model_type = ''
-        # DATABASE
-        self.__init_db()
 
         self.grid_columnconfigure((0), weight = 1)
         self.grid_rowconfigure((0, 1, 2), weight = 1)
@@ -47,8 +44,7 @@ class App(ctk.CTk):
         self.__load_3d_model()    
     
     def __load_learn_model(self):
-        self.type = 'learn'
-        self.__load_3d_model()
+        self.learn_window = LearnWindow()
 
     def __load_3d_model(self):
         # destroy current process if exists
@@ -149,23 +145,6 @@ class App(ctk.CTk):
         self.bind('<r>', lambda event : self.__reset_clicked())
         self.bind('<g>', lambda event : self.__generate())
         self.bind('<Escape>', lambda event : self.close_app())
-
-    def __init_db(self):
-        self.db_manager = DBManager()
-        # init table
-        self.db_manager.create_table('algorithms')
-        if self.db_manager.check_if_empty('algorithms'):
-            # scrape objs only if algorithms table is empty
-            self.__init_scraper()
-            scraped_obj_arr = self.scraper.get_scraped_obj()
-            self.db_manager.insert_data('algorithms', scraped_obj_arr)
-
-    def __init_scraper(self):
-        self.scraper = AlgorithmScraper()
-
-        self.scraper.get_response()
-        self.scraper.parse_html()
-        self.scraper.scrape_alogrithms('f2l')
     
     def __start_stop_clicked(self):
         self.timer.change_timer_state()

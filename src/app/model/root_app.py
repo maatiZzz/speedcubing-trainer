@@ -26,6 +26,5 @@ class RootApp:
     def __init_img(self, img_path):
         try:
             self.img = Image.open(img_path).convert('RGB')
-
         except Exception as e:
             raise(f"Couldn't load texture {e}")

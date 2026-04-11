@@ -11,6 +11,7 @@ class DBManager:
 
     def insert_data(self, name, obj_arr):
         self.cur.executemany(f"INSERT INTO {name} VALUES (?, ?, ?, ?)", obj_arr)
+        print("inserting")
 
     def check_if_empty(self, name):
         res = self.cur.execute(f"SELECT * FROM {name}")
