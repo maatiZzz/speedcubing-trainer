@@ -6,17 +6,23 @@ class DBManager:
         self.con = sqlite3.connect('rubik.db')
         self.cur = self.con.cursor()
     
-    def create_table(self, name):
-        self.cur.execute(f"CREATE TABLE IF NOT EXISTS {name}(name, setup, solution, category)")
+    def create_table(self, table_name):
+        self.cur.execute(f"CREATE TABLE IF NOT EXISTS {table_name}(name, setup, solution, category)")
 
-    def insert_data(self, name, obj_arr):
-        self.cur.executemany(f"INSERT INTO {name} VALUES (?, ?, ?, ?)", obj_arr)
-        print("inserting")
+    def insert_data(self, table_name, obj_arr):
+        self.cur.executemany(f"INSERT INTO {table_name} VALUES (?, ?, ?, ?)", obj_arr)
+        
+    def commit_changes(self):
+        self.con.commit()
 
-    def check_if_empty(self, name):
-        res = self.cur.execute(f"SELECT * FROM {name}")
+    def check_if_empty(self, table_name):
+        res = self.cur.execute(f"SELECT * FROM {table_name}")
         return len(res.fetchall()) == 0
+    
+    def get_all_alg_data(self, table_name):
+        res = self.cur.execute(f"SELECT * FROM {table_name}")
+        return res.fetchall()
 
-    def view_data(self, name):
-        res = self.cur.execute(f"SELECT setup FROM {name}")
+    def view_data(self, table_name):
+        res = self.cur.execute(f"SELECT * FROM {name}")
         return res.fetchone()[0]

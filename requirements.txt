@@ -2,3 +2,4 @@ ursina
 customtkinter
 bs4
 requests
+multiprocessing

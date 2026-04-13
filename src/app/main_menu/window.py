@@ -39,10 +39,6 @@ class App(ctk.CTk):
         # TIMER FRAME
         self.__init_timer_frame()
 
-    def __load_scramble_model(self):
-        self.type = 'scramble'
-        self.__load_3d_model()    
-    
     def __load_learn_model(self):
         self.learn_window = LearnWindow()
 
@@ -107,14 +103,14 @@ class App(ctk.CTk):
         self.model_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
         self.model_frame.grid_columnconfigure((0, 1), weight=1)
 
-        self.model_button = ctk.CTkButton(self.model_frame, text="View 3D scramble animation", command=self.__load_scramble_model,
+        self.model_button = ctk.CTkButton(self.model_frame, text="View 3D scramble animation", command=self.__load_3d_model,
                                                bg_color="black", font=('Arial', 18))
         self.model_button.grid(row = 0, column = 0, padx = 20, pady = 40, sticky="ew")
         
-        self.learn_button = ctk.CTkButton(self.model_frame, text="Learn algorithms", 
-                                          command=self.__load_learn_model,
-                                               bg_color="black", font=('Arial', 18))
-        self.learn_button.grid(row = 0, column = 1, padx = 20, pady = 40, sticky="ew")
+        # self.learn_button = ctk.CTkButton(self.model_frame, text="Learn algorithms", 
+        #                                   command=self.__load_learn_model,
+        #                                        bg_color="black", font=('Arial', 18))
+        # self.learn_button.grid(row = 0, column = 1, padx = 20, pady = 40, sticky="ew")
 
     def __init_timer_frame(self):
         self.timer_frame = ctk.CTkFrame(self)
