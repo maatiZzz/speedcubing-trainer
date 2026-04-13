@@ -2,6 +2,7 @@ import customtkinter as ctk
 from app.logic.database.db_manager import DBManager
 from app.logic.scraper.algo_scraper import AlgorithmScraper
 from app.model.root_app import RootApp
+import multiprocessing as mp
 
 class LearnWindow(ctk.CTkToplevel):
     def __init__(self, queue):
@@ -58,12 +59,21 @@ class LearnWindow(ctk.CTkToplevel):
         alg_list = self.db_manager.get_all_alg_data('algorithms')
         # create new label and button for each alg
         for index, alg in enumerate(alg_list):
-            print(alg[1] + "\n")
+            # local variable in lambda, because it works only when button is clicked            
             learn_button = ctk.CTkButton(self.list_frame, text=f"Learn {alg[0]}",
                                 command=lambda s = alg[1]: self.__load_model(s), bg_color="black", font=('Arial', 18))
             learn_button.grid(row = index, column = 0, padx = 20, pady = 40, sticky = "new")
 
     def __load_model(self, setup_sequence):
-        print(setup_sequence)
-        model_app = RootApp(self.queue, setup_sequence)
+        # destroy current process if exists
+        if hasattr(self, "model_app_process") and self.model_app_process.is_alive():
+                self.model_app_process.kill()
+
+        # create new process
+        self.model_app_process = mp.Process(target=self.start_ursina, args=(self.queue, setup_sequence))
+        self.model_app_process.start()
+
+    @staticmethod
+    def start_ursina(queue, moves):
+        model_app = RootApp(queue, moves)
         model_app.run_root_app()
