@@ -5,7 +5,7 @@ import os
 
 
 class RootApp:
-    def __init__(self, queue, generated_sq=''):
+    def __init__(self, queue=None, generated_sq=''):
         self.app = Ursina(title = 'Cube model')
         
         img_path = self.__set_img_path()

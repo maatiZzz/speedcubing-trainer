@@ -4,13 +4,15 @@ from app.logic.scraper.algo_scraper import AlgorithmScraper
 from app.model.root_app import RootApp
 
 class LearnWindow(ctk.CTkToplevel):
-    def __init__(self):
+    def __init__(self, queue):
         super().__init__()
         self.geometry("800x800")
         self.title = "Learn"
 
         self.grid_columnconfigure((0), weight = 1)
         self.grid_rowconfigure((0, 1), weight = 1)
+
+        self.queue = queue
 
         # DATABASE
         self.__init_db()
@@ -54,13 +56,14 @@ class LearnWindow(ctk.CTkToplevel):
 
     def __init_alg_list(self):
         alg_list = self.db_manager.get_all_alg_data('algorithms')
-        print(alg_list)
         # create new label and button for each alg
         for index, alg in enumerate(alg_list):
-            self.learn_button = ctk.CTkButton(self.list_frame, text=f"Learn {alg[0]}",
-                                command=lambda : self.__load_model(alg[1]), bg_color="black", font=('Arial', 18))
-            self.learn_button.grid(row = index, column = 0, padx = 20, pady = 40, sticky = "new")
+            print(alg[1] + "\n")
+            learn_button = ctk.CTkButton(self.list_frame, text=f"Learn {alg[0]}",
+                                command=lambda s = alg[1]: self.__load_model(s), bg_color="black", font=('Arial', 18))
+            learn_button.grid(row = index, column = 0, padx = 20, pady = 40, sticky = "new")
 
     def __load_model(self, setup_sequence):
-        self.model_app = RootApp(setup_sequence)
-        self.model_app.run_root_app()
+        print(setup_sequence)
+        model_app = RootApp(self.queue, setup_sequence)
+        model_app.run_root_app()

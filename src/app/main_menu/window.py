@@ -40,7 +40,7 @@ class App(ctk.CTk):
         self.__init_timer_frame()
 
     def __load_learn_model(self):
-        self.learn_window = LearnWindow()
+        self.learn_window = LearnWindow(self.mp_queue)
 
     def __load_3d_model(self):
         # destroy current process if exists
@@ -48,12 +48,13 @@ class App(ctk.CTk):
                 self.model_app_process.kill()
 
         # create new process
-        self.model_app_process = mp.Process(target=self.__start_ursina)
+        self.model_app_process = mp.Process(target=self.start_ursina, args=(self.mp_queue, self.moves))
         self.model_app_process.start()
 
-    def __start_ursina(self):
-        self.model_app = RootApp(self.mp_queue, self.moves)
-        self.model_app.run_root_app()
+    @staticmethod
+    def start_ursina(queue, moves):
+        model_app = RootApp(queue, moves)
+        model_app.run_root_app()
 
     def __generate(self):
         self.generator.generate_sequence()
@@ -107,10 +108,10 @@ class App(ctk.CTk):
                                                bg_color="black", font=('Arial', 18))
         self.model_button.grid(row = 0, column = 0, padx = 20, pady = 40, sticky="ew")
         
-        # self.learn_button = ctk.CTkButton(self.model_frame, text="Learn algorithms", 
-        #                                   command=self.__load_learn_model,
-        #                                        bg_color="black", font=('Arial', 18))
-        # self.learn_button.grid(row = 0, column = 1, padx = 20, pady = 40, sticky="ew")
+        self.learn_button = ctk.CTkButton(self.model_frame, text="Learn algorithms", 
+                                          command=self.__load_learn_model,
+                                               bg_color="black", font=('Arial', 18))
+        self.learn_button.grid(row = 0, column = 1, padx = 20, pady = 40, sticky="ew")
 
     def __init_timer_frame(self):
         self.timer_frame = ctk.CTkFrame(self)
