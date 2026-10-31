@@ -1,0 +1,248 @@
+[
+  {
+    "name": "F2L 1",
+    "setup": "F R' F' R",
+    "solution": "U R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 2",
+    "setup": "R' F R F'",
+    "solution": "F R' F' R",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 3",
+    "setup": "F' U F",
+    "solution": "F' U' F",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 4",
+    "setup": "R U' R'",
+    "solution": "R U R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 5",
+    "setup": "R U R' U2' R U' R' U",
+    "solution": "U' R U R' U2 R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 6",
+    "setup": "F' U' F U2' F' U F U'",
+    "solution": "U' r U' R' U R U r'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 7",
+    "setup": "R U R' U2' R U2' R' U",
+    "solution": "U' R U2 R' U' R U2 R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 8",
+    "setup": "r' U' R2 U' R2' U2' r",
+    "solution": "d R' U2 R U R' U2 R",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 9",
+    "setup": "F' U F U' R U R' U",
+    "solution": "U' R U' R' U F' U' F",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 10",
+    "setup": "R U' R' U' R U' R' U",
+    "solution": "U' R U R' U R U R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 11",
+    "setup": "F' U F U' R U2' R' U",
+    "solution": "U' R U2 R' U F' U' F",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 12",
+    "setup": "R U R' U2' R U R' U' R U R'",
+    "solution": "R U' R' U R U' R' U2 R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 13",
+    "setup": "r U2' R' U R U' R' U M",
+    "solution": "y' U R' U R U' R' U' R",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 14",
+    "setup": "R U' R' U' R U R' U",
+    "solution": "U' R U' R' U R U R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 15",
+    "setup": "R U R' U' R U R' U2' R U' R'",
+    "solution": "R' D' R U' R' D R U R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 16",
+    "setup": "F' U F U2' R U R'",
+    "solution": "R U' R' U2 F' U' F",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 17",
+    "setup": "R U' R' U R U2' R'",
+    "solution": "R U2 R' U' R U R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 18",
+    "setup": "R U R' U' R U R' F R' F' R",
+    "solution": "y' R' U2 R U R' U' R",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 19",
+    "setup": "R U R' U' R U2' R' U'",
+    "solution": "U R U2 R' U R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 20",
+    "setup": "R U R' F R' F' R2' U R' U",
+    "solution": "y' U' R' U2 R U' R' U R",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 21",
+    "setup": "R U' R' U2' R U R'",
+    "solution": "U2 R U R' U R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 22",
+    "setup": "F' L' U2' L F",
+    "solution": "r U' r' U2 r U r'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 23",
+    "setup": "R U' R' U R U' R' U2' R U' R'",
+    "solution": "U R U' R' U' R U' R' U R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 24",
+    "setup": "R U R' F R U R' U' F'",
+    "solution": "F U R U' R' F' R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 25",
+    "setup": "F' R U R' U' R' F R",
+    "solution": "U' R' F R F' R U R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 26",
+    "setup": "F' U' F U R U R' U'",
+    "solution": "U R U' R' F R' F' R",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 27",
+    "setup": "R U R' U' R U R'",
+    "solution": "R U' R' U R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 28",
+    "setup": "R' F R F' U R U' R'",
+    "solution": "R U R' U' F R' F' R",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 29",
+    "setup": "F R' F' R F R' F' R",
+    "solution": "R' F R F' U R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 30",
+    "setup": "R U' R' U R U' R'",
+    "solution": "R U R' U' R U R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 31",
+    "setup": "R U R' F R' F' R U",
+    "solution": "U' R' F R F' R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 32",
+    "setup": "R U' R' U R U' R' U R U' R'",
+    "solution": "U R U' R' U R U' R' U R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 33",
+    "setup": "R U R' U2' R U R' U",
+    "solution": "U' R U' R' U2 R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 34",
+    "setup": "R U' R' U2' R U' R' U'",
+    "solution": "U R U R' U2 R U R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 35",
+    "setup": "F' U F U' R U' R' U",
+    "solution": "U' R U R' U F' U' F",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 36",
+    "setup": "R U' R' U2' F R' F' R U2'",
+    "solution": "U F' U' F U' R U R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 37",
+    "setup": "R U' R U2' F R2' F' U2' R2'",
+    "solution": "R2 U2 F R2 F' U2 R' U R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 38",
+    "setup": "R U' R' U R U2' R' U R U' R'",
+    "solution": "R U' R' U' R U R' U2 R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 39",
+    "setup": "R U' R' U' R U R' U2' R U' R'",
+    "solution": "R U' R' U R U2 R' U R U' R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 40",
+    "setup": "R U R' F U R U' R' F' R U R'",
+    "solution": "r U' r' U2 r U r' R U R'",
+    "category": "F2L"
+  },
+  {
+    "name": "F2L 41",
+    "setup": "R F U R U' R' F' U' R'",
+    "solution": "R U' R' r U' r' U2 r U r'",
+    "category": "F2L"
+  }
+]
