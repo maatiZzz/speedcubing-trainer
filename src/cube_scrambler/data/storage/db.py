@@ -48,11 +48,11 @@ class DBManager:
                 obj_arr,
             )
 
-    def check_if_exists(self, table_name: str = "algorithms") -> bool:
+    def check_if_empty(self, table_name: str = "algorithms") -> bool:
         table = self._validate_identifier(table_name)
         with self._connect() as con:
             row = con.execute(f"SELECT EXISTS(SELECT 1 FROM {table})").fetchone()
-            return bool(row and row[0])
+            return not bool(row and row[0])
 
     def get_all_alg_data(
         self,
