@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from cube_scrambler.config import ALGORITHMS_SEED_PATH, DB_PATH
 from cube_scrambler.data.storage.db import DBManager
-from cube_scrambler.data.scraper import AlgorithmScraper
+from cube_scrambler.data.scraper.scraper import AlgorithmScraper
 from cube_scrambler.data.persistence.algorithm import Algorithm
 
 class AlgorithmRepository:
