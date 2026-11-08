@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from cube_scrambler.config import ALGORITHMS_SEED_PATH, DB_PATH
 from cube_scrambler.data.storage.db import DBManager
+from cube_scrambler.data.scraper import AlgorithmScraper
 from cube_scrambler.data.persistence.algorithm import Algorithm
 
 class AlgorithmRepository:
@@ -40,6 +41,16 @@ class AlgorithmRepository:
         ]
         if records:
             self.db.insert_data(self.TABLE_NAME, records)
+
+    def sync_from_scraper(self, category: str = "F2L") -> int:
+        scraper = AlgorithmScraper()
+        scraper.get_response()
+        scraper.parse_html()
+        scraper.scrape_algorithms(category.upper())
+        scraped = scraper.get_scraped_obj()
+        if scraped:
+            self.db.insert_data(self.TABLE_NAME, scraped)
+        return len(scraped)
 
     def get_all(self, category: str | None = None) -> list[Algorithm]:
         rows = self.db.get_all_alg_data(self.TABLE_NAME, category=category)
