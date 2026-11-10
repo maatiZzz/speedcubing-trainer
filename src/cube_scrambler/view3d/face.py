@@ -1,28 +1,43 @@
 import ursina as ur
 from ursina import Texture
+from cube_scrambler.config import CUBE_TEXTURE_PATH
 
 
 class Face(ur.Entity):
     """Single face of a rubik's cube piece."""
 
+    shared_texture: Texture | None = None
+
     def __init__(
         self,
         parent: ur.Entity,
-        img: object,
         face_type: str,
         face_color: str = "black",
     ) -> None:
         """Create face entity with texture and mesh."""
         super().__init__(parent=parent)
 
-        self.texture = Texture(img)
-        self.texture.filtering = "point"           # point filtering keeps colors sharp
+        self._init_texture()
+        self.texture = self.get_texture()
         self.type = face_type
         self._set_color(face_color)
         self._init_mesh()
 
+    @classmethod
+    def _init_texture(cls) -> None:
+        if cls.shared_texture is None:
+            cls.shared_texture = Texture(CUBE_TEXTURE_PATH)
+            # point filtering keeps colors sharp without blur
+            cls.shared_texture.filtering = "point"
+
+    @classmethod
+    def get_texture(cls) -> Texture:
+        if cls.shared_texture is None:
+            cls._init_texture()
+        return cls.shared_texture
+
     def _set_color(self, face_color: str) -> None:
-        """Pick horizontal texture coordinates for the face color."""
+        """Pick horizontal texture coordinates for the face color (/assets/cube-colors)."""
         match face_color:
             case "b":
                 self.u_start, self.u_end = 0.0, 1 / 7
@@ -41,7 +56,7 @@ class Face(ur.Entity):
                 self.u_start, self.u_end = 6 / 7, 6.99 / 7
 
     def _init_mesh(self) -> None:
-        """Build mesh quad from 4 vertices and UV map."""
+        """Build mesh from 4 vertices and UV map."""
         vertices = self._pick_vertices()
 
         triangles = [(0, 1, 2), (2, 3, 0)]
