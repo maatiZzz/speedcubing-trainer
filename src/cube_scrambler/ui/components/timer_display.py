@@ -6,8 +6,8 @@ class TimerDisplay(ctk.CTkLabel):
     """CustomTkinter label widget wrapping the domain Stopwatch."""
 
     def __init__(self, timer_frame: ctk.CTkFrame) -> None:
-        super().__init__(timer_frame, text="00:00:000 s", font=("Arial", 26))
-        self.grid(row=0, column=0, padx=20, pady=40, sticky="new", columnspan=2)
+        super().__init__(timer_frame, text="00:00:000 s", font=("Arial", 72))
+        self.grid(row=0, column=0, padx=24, pady=20, sticky="nsew", columnspan=2)
         self.stopwatch = Stopwatch()
 
     def start_timer(self) -> None:

@@ -8,7 +8,18 @@ from cube_scrambler.view3d.app import RootApp
 
 
 class App(ctk.CTk):
+
     """Main CustomTkinter application window."""
+
+    _BUTTON_HEIGHT: int = 70
+    BUTTON_FONT: tuple[str, int] = ("Arial", 34)
+    PRIMARY_TIMER_GRID: dict[str, object] = {
+        "row": 1,
+        "column": 0,
+        "padx": 24,
+        "pady": 20,
+        "sticky": "ew",
+    }
 
     def __init__(self) -> None:
         super().__init__()
@@ -25,7 +36,9 @@ class App(ctk.CTk):
         self.generator = Generator()
 
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure((0, 1, 2), weight=1)
+        self.grid_rowconfigure(0, weight=3)
+        self.grid_rowconfigure(1, weight=2)
+        self.grid_rowconfigure(2, weight=3)
 
         self._init_scramble_frame()
         self._init_model_frame()
@@ -37,7 +50,10 @@ class App(ctk.CTk):
         if self.learn_window is not None and self.learn_window.winfo_exists():
             self.learn_window.focus()
             return
-        self.learn_window = LearnView(on_select_algorithm=self._load_3d_model)
+        self.learn_window = LearnView(
+            on_select_algorithm=self._load_3d_model,
+            button_height=self._BUTTON_HEIGHT,
+        )
 
     def _load_3d_model(self, sequence: str | None = None) -> None:
         target_sequence = sequence if sequence is not None else self.moves
@@ -87,88 +103,107 @@ class App(ctk.CTk):
         except Exception:
             pass
 
+    def _create_button(
+        self,
+        parent: ctk.CTkFrame,
+        text: str,
+        command: object,
+        fg_color: str | None = None,
+        hover_color: str | None = None,
+    ) -> ctk.CTkButton:
+        """Create a menu button with height strictly controlled by _BUTTON_HEIGHT."""
+        font_family, font_size = self.BUTTON_FONT
+        fitted_size = min(font_size, max(10, self._BUTTON_HEIGHT - 12))
+        kwargs: dict[str, object] = {
+            "text": text,
+            "command": command,
+            "height": self._BUTTON_HEIGHT,
+            "bg_color": "black",
+            "font": (font_family, fitted_size),
+        }
+        if fg_color is not None:
+            kwargs["fg_color"] = fg_color
+        if hover_color is not None:
+            kwargs["hover_color"] = hover_color
+        button = ctk.CTkButton(parent, **kwargs)
+        # keep internal label from forcing button taller than _BUTTON_HEIGHT
+        button.grid_propagate(False)
+        return button
+
     def _show_resume_button(self) -> None:
         self.start_stop_button.grid_forget()
-        self.resume_button.grid(row=1, column=0, padx=20, pady=40, sticky="sew")
+        self.resume_button.grid(**self.PRIMARY_TIMER_GRID)
 
     def _init_scramble_frame(self) -> None:
         self.sequence_frame = ctk.CTkFrame(self)
-        self.sequence_frame.grid(row=0, column=0, padx=10, pady=10, sticky="new")
+        self.sequence_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
         self.sequence_frame.grid_columnconfigure(0, weight=1)
+        self.sequence_frame.grid_rowconfigure((0, 1), weight=1)
 
         self.sequence_string = ctk.CTkLabel(
             self.sequence_frame,
             text="Generate your scramble",
-            font=("Arial", 22),
+            font=("Arial", 50),
+            wraplength=ROOT_WINDOW_WIDTH - 120,
         )
-        self.generate_button = ctk.CTkButton(
+        self.generate_button = self._create_button(
             self.sequence_frame,
             text="Generate scramble (g)",
             command=self._generate,
-            bg_color="black",
-            font=("Arial", 18),
         )
-        self.sequence_string.grid(row=0, column=0, padx=20, pady=40, sticky="new")
-        self.generate_button.grid(row=1, column=0, padx=20, pady=40, sticky="sew")
+        self.sequence_string.grid(row=0, column=0, padx=24, pady=20, sticky="nsew")
+        self.generate_button.grid(row=1, column=0, padx=24, pady=20, sticky="ew")
 
     def _init_model_frame(self) -> None:
         self.model_frame = ctk.CTkFrame(self)
-        self.model_frame.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        self.model_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
         self.model_frame.grid_columnconfigure((0, 1), weight=1)
+        self.model_frame.grid_rowconfigure(0, weight=1)
 
-        self.model_button = ctk.CTkButton(
+        self.model_button = self._create_button(
             self.model_frame,
             text="View 3D scramble animation",
             command=lambda: self._load_3d_model(self.moves),
-            bg_color="black",
-            font=("Arial", 18),
         )
-        self.model_button.grid(row=0, column=0, padx=20, pady=40, sticky="ew")
+        self.model_button.grid(row=0, column=0, padx=24, pady=24, sticky="ew")
 
-        self.learn_button = ctk.CTkButton(
+        self.learn_button = self._create_button(
             self.model_frame,
             text="Learn algorithms",
             command=self._open_learn_window,
-            bg_color="black",
-            font=("Arial", 18),
         )
-        self.learn_button.grid(row=0, column=1, padx=20, pady=40, sticky="ew")
+        self.learn_button.grid(row=0, column=1, padx=24, pady=24, sticky="ew")
 
     def _init_timer_frame(self) -> None:
         self.timer_frame = ctk.CTkFrame(self)
-        self.timer_frame.grid(row=2, column=0, padx=1, pady=10, sticky="sew")
+        self.timer_frame.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
         self.timer_frame.grid_columnconfigure((0, 1), weight=1)
+        self.timer_frame.grid_rowconfigure((0, 1), weight=1)
 
         self.timer = TimerDisplay(self.timer_frame)
-        self.start_stop_button = ctk.CTkButton(
+        self.start_stop_button = self._create_button(
             self.timer_frame,
             text="Start (space)",
             command=self._start_stop_clicked,
-            bg_color="black",
             fg_color="green",
             hover_color="#006810",
-            font=("Arial", 18),
         )
-        self.resume_button = ctk.CTkButton(
+        self.resume_button = self._create_button(
             self.timer_frame,
             text="Resume (space)",
             command=self._resume_button_clicked,
-            bg_color="black",
             fg_color="green",
             hover_color="#006810",
-            font=("Arial", 18),
         )
-        self.reset_button = ctk.CTkButton(
+        self.reset_button = self._create_button(
             self.timer_frame,
             text="Reset (r)",
             command=self._reset_clicked,
-            bg_color="black",
             fg_color="#ff4d01",
             hover_color="#a63400",
-            font=("Arial", 18),
         )
-        self.start_stop_button.grid(row=1, column=0, padx=20, pady=40, sticky="sew")
-        self.reset_button.grid(row=1, column=1, padx=20, pady=40, sticky="sew")
+        self.start_stop_button.grid(**self.PRIMARY_TIMER_GRID)
+        self.reset_button.grid(row=1, column=1, padx=24, pady=20, sticky="ew")
 
     def _init_window(self, title: str) -> None:
         self.geometry(f"{ROOT_WINDOW_WIDTH}x{ROOT_WINDOW_HEIGHT}")
@@ -207,4 +242,4 @@ class App(ctk.CTk):
 
     def _show_start_stop_button(self) -> None:
         self.resume_button.grid_forget()
-        self.start_stop_button.grid(row=1, column=0, padx=20, pady=40, sticky="sew")
+        self.start_stop_button.grid(**self.PRIMARY_TIMER_GRID)
