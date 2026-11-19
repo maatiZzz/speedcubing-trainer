@@ -69,17 +69,15 @@ class Generator:
                 if len(sequence) > 1:
                     last_last_move = self._base_face(sequence[-2])
 
-            if (
-                last_move
-                and random_move == last_move
-                and random_move == self.OPPOSITES[last_move]
-            ):
+            if last_move and random_move == last_move:
                 continue
 
+            # avoid redundant opposite-axis triplets like R L R
             if (
                 last_last_move
                 and last_move
                 and random_move == last_last_move
+                and last_move == self.OPPOSITES[random_move]
             ):
                 continue
 
