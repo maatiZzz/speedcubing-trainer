@@ -5,8 +5,8 @@ A desktop application designed for speedcubing.
 What it offers:
 - random-sequence scramble generator
 - an integrated speedcubing timer
-- a 3D real-time cube visualization engine (powered by Ursina Engine / Panda3D),
-- an algorithm training module (F2L, OLL, PLL).
+- a 3D real-time cube visualization engine (powered by Ursina Engine / Panda3D)
+- an F2L algorithm training module.
 
 The graphical interface is built with `customtkinter`, while the 3D rendering pipeline runs in an isolated subprocess utilizing OpenGL.
 
@@ -46,8 +46,9 @@ The graphical interface is built with `customtkinter`, while the 3D rendering pi
 
 3. **Launch the application**:
    ```bash
-   uv run python src/main.py
+   uv run cube-scrambler
    ```
+   *(Or run `uv run python -m cube_scrambler`, and `uv run pytest` to execute the test suite.)*
 
 ---
 
@@ -61,14 +62,15 @@ If running in an environment without `uv`:
    source .venv/bin/activate
    ```
 
-2. **Install dependencies**:
+2. **Install dependencies and package**:
    ```bash
    pip install -r requirements.txt
+   pip install -e . --no-deps
    ```
 
 3. **Launch the application**:
    ```bash
-   python src/main.py
+   cube-scrambler
    ```
 
 ---
@@ -83,7 +85,7 @@ If running in an environment without `uv`:
 - **`g`**: Generate a new scramble sequence
 - **`Esc`**: Exit the application
 #### 3D Cube View (Ursina Engine):
-- - **Manual Face Turns**:
+- **Manual Face Turns**:
   - `L` – Left face
   - `R` – Right face
   - `U` – Up face
@@ -108,15 +110,17 @@ If running in an environment without `uv`:
 ## Project Structure
 
 ```text
-├── assets/                     # Graphic assets (textures, face colors, application icon)
+├── assets/                     # Graphic assets (cube colors, icon) and offline algorithms seed
 ├── src/
-│   ├── main.py                 # Application entrypoint
-│   └── app/
-│       ├── constants/          # Configuration constants (window dimensions, move chances)
-│       ├── logic/              # Business logic: timer, move generator, scraper, database
-│       ├── main_menu/          # CustomTkinter UI frames (main window, algorithm view)
-│       └── model/              # Ursina/Panda3D entities and scenes (cube, faces, pieces)
-├── pyproject.toml              # Project metadata and PEP 621 dependencies specification
+│   └── cube_scrambler/
+│       ├── __main__.py         # Application entrypoint
+│       ├── config.py           # Paths, window dimensions, and scramble probabilities
+│       ├── core/               # Domain logic: timer, scramble generator, notation parser
+│       ├── data/               # SQLite storage, algorithm repository, SpeedCubeDB scraper
+│       ├── ui/                 # CustomTkinter main window, timer widget, algorithm view
+│       └── view3d/             # Ursina/Panda3D 3D cube, pieces, faces, and scene
+├── tests/                      # Pytest unit tests for storage, repository, generator, and parser
+├── pyproject.toml              # Project metadata, PEP 621 dependencies, and script entrypoint
 ├── uv.lock                     # Deterministic multi-platform dependency lockfile
 └── requirements.txt            # Fallback dependency manifest for traditional pip
 ```
