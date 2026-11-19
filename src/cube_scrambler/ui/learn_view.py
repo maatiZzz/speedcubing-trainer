@@ -7,12 +7,17 @@ from cube_scrambler.data.persistence.repository import AlgorithmRepository
 class LearnView(ctk.CTkToplevel):
     """Scrollable window listing algorithms to practice in the 3D viewer."""
 
-    def __init__(self, on_select_algorithm: Callable[[str], None]) -> None:
+    def __init__(
+        self,
+        on_select_algorithm: Callable[[str], None],
+        button_height: int | None = None,
+    ) -> None:
         super().__init__()
         self.geometry(f"{LEARN_WINDOW_WIDTH}x{LEARN_WINDOW_HEIGHT}")
         self.title("Learn Algorithms")
 
         self.on_select_algorithm = on_select_algorithm
+        self.button_height = button_height
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
@@ -31,7 +36,7 @@ class LearnView(ctk.CTkToplevel):
         self.header_label = ctk.CTkLabel(
             self.label_frame,
             text="Pick an algorithm to practice:",
-            font=("Arial", 22),
+            font=("Arial", 40),
         )
         self.header_label.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
 
@@ -49,17 +54,28 @@ class LearnView(ctk.CTkToplevel):
             info_label = ctk.CTkLabel(
                 row_frame,
                 text=f"{alg.name}  |  Setup: {alg.setup}  |  Alg: {alg.solution}",
-                font=("Arial", 15),
+                font=("Arial", 34),
                 anchor="w",
+                justify="left",
+                wraplength=LEARN_WINDOW_WIDTH - 340,
             )
             info_label.grid(row=0, column=0, padx=15, pady=10, sticky="ew")
 
-            learn_button = ctk.CTkButton(
-                row_frame,
-                text=f"Learn {alg.name}",
-                command=lambda s=alg.setup: self.on_select_algorithm(s),
-                bg_color="black",
-                font=("Arial", 16),
-                width=140,
-            )
+            button_font_size = 30
+            if self.button_height is not None:
+                button_font_size = min(30, max(10, self.button_height - 12))
+
+            button_kwargs: dict[str, object] = {
+                "text": f"Learn {alg.name}",
+                "command": lambda s=alg.setup: self.on_select_algorithm(s),
+                "bg_color": "black",
+                "font": ("Arial", button_font_size),
+                "width": 230,
+            }
+            if self.button_height is not None:
+                button_kwargs["height"] = self.button_height
+
+            learn_button = ctk.CTkButton(row_frame, **button_kwargs)
+            if self.button_height is not None:
+                learn_button.grid_propagate(False)
             learn_button.grid(row=0, column=1, padx=15, pady=10, sticky="e")
