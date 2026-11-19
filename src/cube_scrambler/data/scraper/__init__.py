@@ -1,0 +1,3 @@
+"""
+    Scraper fetching algorithms data
+"""
